@@ -1,0 +1,3 @@
+[submodule "src/shared-apis"]
+	path = src/shared-apis
+	url = git@github.com:MightyCryptowall/shared-apis.git

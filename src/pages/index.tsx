@@ -1,11 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import { useRouter } from 'next/router'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import { useRouter } from "next/router";
+import useGetAllPostQuery from "@/shared-apis/queries/useGetAllPostQuery";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const posts = useGetAllPostQuery();
   return (
     <>
       <Head>
@@ -16,20 +18,25 @@ export default function Home() {
       </Head>
       <main className="w-screen h-screen flex justify-center items-center">
         <div>
-          <div className='flex gap-2 justify-center w-[15rem] mb-2'>
-            <input className='bg-white rounded py-2 border-[0.1rem] border-black/100 outline-none'/>
-            <button className='bg-black text-white px-2 rounded'>Create</button>
+          <div className="flex gap-2 justify-center w-[15rem] mb-2">
+            <input className="bg-white rounded px-2 py-2 border-[0.1rem] border-black/100 outline-none" />
+            <button className="bg-black text-white px-2 rounded">Create</button>
           </div>
-          <ul className='flex flex-col gap-2 h-[30rem] overflow-y-auto'>
-            <li className='px-3 py-5 bg-gradient-to-tr from-pink-600 to-indigo-500 text-slate-50 w-[15rem] rounded shadow'>Post 1</li>
-            <li className='px-3 py-5 bg-gradient-to-tr from-pink-600 to-indigo-500 text-slate-50 w-[15rem] rounded shadow'>Post 2</li>
-            <li className='px-3 py-5 bg-gradient-to-tr from-pink-600 to-indigo-500 text-slate-50 w-[15rem] rounded shadow'>Post 3</li>
-            <li className='px-3 py-5 bg-gradient-to-tr from-pink-600 to-indigo-500 text-slate-50 w-[15rem] rounded shadow'>Post 4</li>
-            <li className='px-3 py-5 bg-gradient-to-tr from-pink-600 to-indigo-500 text-slate-50 w-[15rem] rounded shadow'>Post 5</li>
-          </ul>
+          {posts.isLoading && <h5>Loading...</h5>}
+          {posts.data && posts.data.length > 0 && (
+            <ul className="flex flex-col gap-2 h-[30rem] overflow-y-auto">
+              {posts.data.map((item) => (
+                <li
+                  className="px-3 py-5 bg-gradient-to-tr from-pink-600 to-indigo-500 text-slate-50 w-[15rem] rounded shadow"
+                  key={item.id}
+                >
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-       
       </main>
     </>
-  )
+  );
 }
